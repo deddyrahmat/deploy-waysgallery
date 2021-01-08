@@ -38,7 +38,7 @@ const Home = () => {
             payload : e.target.value
         })
         // setSearch(e.target.value);
-        console.log("data",e.target.value);
+        // console.log("data",e.target.value);
     }
 
 
@@ -83,7 +83,7 @@ const Home = () => {
                         <Col md={{size: 3, offset:5}} className="text-right">
                             <div className="form-group has-search">
                                 <span className="form-control-feedback"><Search /></span>
-                                <Input type="text" name="seacrh" id="examplePassword" placeholder="Seacrh" onChange={handleSearch} />
+                                <Input type="text" name="seacrh" id="examplePassword" placeholder="Seacrh Title Post" onChange={handleSearch} />
                             </div>
                         </Col>
                     </Row>

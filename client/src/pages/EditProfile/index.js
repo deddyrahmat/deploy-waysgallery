@@ -120,7 +120,8 @@ const EditProfile = (props) => {
     
     const response = await API.post("/art", body, config);
     if (response.status === 200) {
-      alert("Upload Success")
+      // alert("Upload Success")
+      setModalArt(true)
     }
   }, [])
 
@@ -132,6 +133,12 @@ const EditProfile = (props) => {
     maxFiles:10,
     accept: 'image/jpeg, image/jpg, image/png'
   })
+
+
+  // modal Art
+  const [modalArt, setModalArt] = useState(false);    
+  const toggleArt = () => setModalArt(!modalArt);
+  // modal Art
 
 
   // modal Profile
@@ -202,6 +209,18 @@ const EditProfile = (props) => {
         </Container>
 
         {/* Pop UP/ Modal  */}
+
+        <Modal style={{marginTop:"200px"}} isOpen={modalArt} toggle={toggleArt}>
+          <ModalBody>
+            <p style={{color:"#469F74", fontSize:"24px", fontWeight:"normal", margin:"auto", textAlign:"center"}}>Created Arts Success</p>
+          </ModalBody>
+          {/* {
+            modalArt == false ? (
+              <Redirect to="/profile" />
+            ) : null
+          } */}
+        </Modal>
+
 
         <Modal style={{marginTop:"200px"}} isOpen={modalProfile} toggle={toggleProfile}>
           <ModalBody>
