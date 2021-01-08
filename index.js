@@ -16,8 +16,12 @@ const router1 = require("./src/routes/v1/index");
 // fungsinya menangkap data form user
 app.use(express.json());
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use("/api/v1",router1);
+
+app.get("/", (req, res) => {
+    res.send("express running");
+});
 
 app.listen(port, console.log(`listening port on ${port}`));
