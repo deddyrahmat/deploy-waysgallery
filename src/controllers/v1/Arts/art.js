@@ -62,45 +62,47 @@ exports.createArt = async (req, res) => {
 
         
         const {body,files} = req;
-        // console.log("coba file: ",files);
+        // const path = files.photo[0].path
+        // const fileName = files.photo[0].filename
+        console.log("coba file: ",files);
         
 
         // menangkanp data user yang login dan menyimpan id
         // dapat dari user login di middleware
         const { id: userId } = req.user;
 
-        if (files.length > 0) {
-            const uploadArt = files.map( async (fileImage) => {
-                const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
-                const art = await Art.create({userId, image: result.secure_url, cloudinary_id: result.public_id, });
-            })
+        // if (files.length > 0) {
+        //     const uploadArt = files.map( async (fileImage) => {
+        //         const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
+        //         const art = await Art.create({userId, image: result.secure_url, cloudinary_id: result.public_id, });
+        //     })
         
 
-            console.log(uploadArt);
+        //     console.log(uploadArt);
             
-            if (uploadArt) {
-                return res.send({
-                        status : "Success",
-                        message : "Art Success Created",
-                        data : {
-                            uploadArt
-                        }
-                    });
-            }else{
-                return res.status(400).send({
-                status : "validation error",
-                error : {
-                    message : "upload failed"
-                }
-            })
-            }
-        }
-            res.status(400).send({
-            status : "validation error",
-            error : {
-                message : "Image Not Found"
-            }
-        })
+        //     if (uploadArt) {
+        //         return res.send({
+        //                 status : "Success",
+        //                 message : "Art Success Created",
+        //                 data : {
+        //                     uploadArt
+        //                 }
+        //             });
+        //     }else{
+        //         return res.status(400).send({
+        //         status : "validation error",
+        //         error : {
+        //             message : "upload failed"
+        //         }
+        //     })
+        //     }
+        // }
+        //     res.status(400).send({
+        //     status : "validation error",
+        //     error : {
+        //         message : "Image Not Found"
+        //     }
+        // })
     
 
     } catch (err) {
