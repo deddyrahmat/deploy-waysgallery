@@ -1,0 +1,67 @@
+.bg-table-admin {
+    background-color: #ddd9d9;
+}
+
+.text-modal {
+    font-size: 24px;
+    color: #828282;
+}
+
+.price-modal {
+    color: #00E016;
+    font-weight: 900;
+    font-size: 24px;
+    font-style: normal;
+}
+
+.body-table-admin{
+    font-size: 14px;
+
+    .table-modal {
+        color: #061E99;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .income-table-admin{
+        color: #061E99;
+    }
+
+    .status-table-admin{
+        font-weight: 500;
+    }
+
+    .accept {
+        color: #FF9900;
+    }
+
+    .success {
+        color: #78A85A;
+    }
+
+    .cancel {
+        color: #E83939;
+    }
+
+    .otw {
+        color: #00D1FF;
+    }
+
+    .btn-table-admin{
+        border: none;
+        font-size: 13px;
+        font-weight: 900;
+        padding: 2px 20px;
+        margin: 2px;
+    }
+
+    .btn-cancel {
+        background-color: #FF0742;
+    }
+
+    .btn-approve{
+        background-color: #0ACF83;
+    }
+}

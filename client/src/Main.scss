@@ -1,0 +1,89 @@
+// button main
+.btn-waysGallery {
+    border: none;
+    margin-top: 5px !important;
+    // margin-left: 33px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    background: #2FC4B2 !important;
+    border-radius: 5px !important;
+    color: white !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+
+    &:hover {
+        background: #57eedc !important;
+    }
+}
+
+.btn-waysGallery-secondary {
+    border: none;
+    margin-top: 5px !important;
+    // margin-left: 33px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    background: #E7E7E7 !important;
+    border-radius: 5px !important;
+    color: black !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+
+    &:hover {
+        background: #f8f8f8 !important;
+    }
+}
+
+.btn-waysGallery-danger {
+    border: none;
+    margin-top: 5px !important;
+    // margin-left: 33px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    background: #FF0742 !important;
+    border-radius: 5px !important;
+    color: white !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+
+    &:hover {
+        background: #f74e75 !important;
+    }
+}
+
+// form main
+.main-form{
+    background-color: #E7E7E7 !important;
+    border: 2px solid #1dccb8 !important;
+    box-sizing: border-box;
+    border-radius: 5px !important;
+    color:rgba(0, 0, 0, 0.5) !important;
+}
+
+.form-upload {
+    align-items: center;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: grey;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    outline: none;
+    text-align: center;
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.form-upload:active {
+    border-color: lightskyblue;
+    color: lightskyblue;
+    border-width: 4px;
+}

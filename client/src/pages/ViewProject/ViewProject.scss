@@ -1,0 +1,10 @@
+.main-img{
+    &:hover{
+        cursor: pointer;
+    }
+}
+.img-post{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
