@@ -8,7 +8,12 @@ exports.uploadFile = ([image]) => {
 
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    allowedFormats: ["jpg", "jpeg", "png"],
+    params: async (req, file) => {
+      return {
+        folder: 'waysgallery',
+        format: "jpeg"
+      };
+    },
   });
 
   // const storage = multer.diskStorage({

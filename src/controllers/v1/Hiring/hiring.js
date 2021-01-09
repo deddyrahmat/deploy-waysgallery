@@ -312,11 +312,12 @@ exports.createUploadProject = async (req, res) => {
 
         const project = await Project.create({...body, hiringId : paramsIdProject});
         if (project) {
-            console.log(files);
+            // console.log(files);
 
             const uploadFileProject = files.map( async (fileImage) => {
-                const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
-                const photo = await FileProject.create({projectId : project.id, image: result.secure_url, cloudinary_id: result.public_id, });
+                // const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
+                // photo 
+                await FileProject.create({projectId : project.id, image: fileImage.path, cloudinary_id: fileImage.filename });
             })
             
             if (!uploadFileProject) {
@@ -530,4 +531,3 @@ exports.project = async (req, res) => {
         resError(err, res);
     }
 }
-

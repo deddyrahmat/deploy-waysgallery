@@ -71,38 +71,38 @@ exports.createArt = async (req, res) => {
         // dapat dari user login di middleware
         const { id: userId } = req.user;
 
-        // if (files.length > 0) {
-        //     const uploadArt = files.map( async (fileImage) => {
-        //         const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
-        //         const art = await Art.create({userId, image: result.secure_url, cloudinary_id: result.public_id, });
-        //     })
+        if (files.length > 0) {
+            const uploadArt = files.map( async (fileImage) => {
+                // const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
+                const art = await Art.create({userId, image: fileImage.path, cloudinary_id: fileImage.filename, });
+            })
         
 
-        //     console.log(uploadArt);
+            console.log(uploadArt);
             
-        //     if (uploadArt) {
-        //         return res.send({
-        //                 status : "Success",
-        //                 message : "Art Success Created",
-        //                 data : {
-        //                     uploadArt
-        //                 }
-        //             });
-        //     }else{
-        //         return res.status(400).send({
-        //         status : "validation error",
-        //         error : {
-        //             message : "upload failed"
-        //         }
-        //     })
-        //     }
-        // }
-        //     res.status(400).send({
-        //     status : "validation error",
-        //     error : {
-        //         message : "Image Not Found"
-        //     }
-        // })
+            if (uploadArt) {
+                return res.send({
+                        status : "Success",
+                        message : "Art Success Created",
+                        data : {
+                            uploadArt
+                        }
+                    });
+            }else{
+                return res.status(400).send({
+                status : "validation error",
+                error : {
+                    message : "upload failed"
+                }
+            })
+            }
+        }
+            res.status(400).send({
+            status : "validation error",
+            error : {
+                message : "Image Not Found"
+            }
+        })
     
 
     } catch (err) {
