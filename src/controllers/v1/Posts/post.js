@@ -229,7 +229,7 @@ exports.createPost = async (req, res) => {
 
         
         const {body,files} = req;
-        console.log("coba file: ",files);
+        // console.log("coba file: ",files);
         
 
         const schema = Joi.object({
@@ -261,8 +261,9 @@ exports.createPost = async (req, res) => {
             console.log(files);
 
             const uploadPhoto = files.map( async (fileImage) => {
-                const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
-                const photo = await Photo.create({postId : post.id, image: result.secure_url, cloudinary_id: result.public_id, });
+                // const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
+                // const photo = 
+                await Photo.create({postId : post.id, image: fileImage.path, cloudinary_id: fileImage.filename });
             })
             
             if (uploadPhoto) {

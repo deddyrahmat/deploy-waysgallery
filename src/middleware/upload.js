@@ -1,14 +1,30 @@
 const multer = require("multer")
 
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const cloudinary = require("./cloudinary");
+
+
 exports.uploadFile = ([image]) => {
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads")
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + "-" + file.originalname);
+
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+      return {
+        folder: 'waysgallery',
+        format: "jpeg"
+      };
     },
   });
+
+  // const storage = multer.diskStorage({
+  //   destination: function (req, file, cb) {
+  //     cb(null, "uploads")
+  //   },
+  //   filename: function (req, file, cb) {
+  //     cb(null, Date.now() + "-" + file.originalname);
+  //   },
+  // });
 
   const fileFilter = function (req, file, cb) {
     if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {

@@ -187,9 +187,9 @@ exports.updateUser = async (req,res) => {
 
         // cek user update profil
         if (files.length > 0) {
-            const result = await cloudinary.uploader.upload(files[0].path);//harus path karna menangkap data path saja
-            body.avatar = result.secure_url;
-            body.cloudinary_id = result.public_id
+            // const result = await cloudinary.uploader.upload(files[0].path);//harus path karna menangkap data path saja
+            body.avatar = files[0].path;
+            body.cloudinary_id = files[0].filename
             // const photo = await User.update({avatar: result.secure_url, cloudinary_id: result.public_id, });
         }
 

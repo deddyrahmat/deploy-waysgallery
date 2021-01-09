@@ -61,9 +61,7 @@ exports.createArt = async (req, res) => {
         //files = array of object / hanya didapat jika melewati upload middleware
 
         
-        const {body,files} = req;
-        // console.log("coba file: ",files);
-        
+        const {body,files} = req;        
 
         // menangkanp data user yang login dan menyimpan id
         // dapat dari user login di middleware
@@ -71,12 +69,12 @@ exports.createArt = async (req, res) => {
 
         if (files.length > 0) {
             const uploadArt = files.map( async (fileImage) => {
-                const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
-                const art = await Art.create({userId, image: result.secure_url, cloudinary_id: result.public_id, });
+                // const result = await cloudinary.uploader.upload(fileImage.path);//harus path karna menangkap data path saja
+                const art = await Art.create({userId, image: fileImage.path, cloudinary_id: fileImage.filename, });
             })
         
 
-            console.log(uploadArt);
+            // console.log(uploadArt);
             
             if (uploadArt) {
                 return res.send({
