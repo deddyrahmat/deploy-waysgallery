@@ -85,6 +85,8 @@ const Post = (props) => {
             "content-type": "multipart/form-data",
           },
           onUploadProgress: progressEvent => {
+            console.log("loaded : ", progressUpload.loaded);
+            console.log("total : ", progressUpload.total);
             let percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
             setProgressUpload(percentage);
 
