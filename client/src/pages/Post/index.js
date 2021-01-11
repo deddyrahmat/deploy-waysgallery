@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useContext} from 'react';
-import { Container,Col , Row,Form, FormGroup, Input, Button, Modal, ModalBody } from 'reactstrap';
+import { Container,Col , Row,Form, FormGroup, Input, Button, Modal, ModalBody, Progress } from 'reactstrap';
 import { useHistory, Redirect } from 'react-router-dom';
 
 // component
@@ -40,6 +40,9 @@ const Post = (props) => {
   
   // menampung image yang akan di tampilkan dan disimpan
   const [imagePrev, setImagePrev] = useState({photos : []});
+
+  // set progres upload file
+  const [progressUpload, setProgressUpload] = useState(0);
   
   const handleChangePost = (e) => {
     setPost({...post,  [e.target.name] : e.target.value})
@@ -67,11 +70,12 @@ const Post = (props) => {
       body.append("description", description);
       body.append("title", title);
 
-      if (imagePrev !== null) {
+      console.log("image prev", imagePrev);
+      if (imagePrev.photos.length > 0) {
         imagePrev.photos.map(img => body.append("image", img.file));
         // body.append("image", imagePost[0]);
       }else{
-        return alert("Choose Your Image Post")
+        return setModalFailed(true);
       }
 
 
@@ -80,6 +84,14 @@ const Post = (props) => {
           headers: {
             "content-type": "multipart/form-data",
           },
+          onUploadProgress: progressEvent => {
+            let percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+            setProgressUpload(percentage);
+
+            if (percentage <= 100) {
+              setmodalProgressUpload(true);
+            }
+          }
         };
         
         const response = await API.post("/post", body, config);
@@ -92,6 +104,9 @@ const Post = (props) => {
           })
 
           setLoading(false);
+          setTimeout(() => {
+            setProgressUpload(0);
+          }, 1000)
         }
 
         // karna setelah diupload datanya tidak langsung muncul di page home, maka ku arahkan ke landing page agar di refresh dan diarahkan ke dashboard
@@ -139,8 +154,11 @@ const Post = (props) => {
   } = useDropzone({
     onDrop,
     maxFiles:10,
+    minSize: 0,
+    maxSize: 1048576,
     accept: 'image/jpeg, image/jpg, image/png'
   })
+  // min size of file is a 0 mb and max size of file is a 1 mb
 
   // ==================================================
   // use utils dropzone 
@@ -151,6 +169,11 @@ const Post = (props) => {
   const [modalPost, setmodalPost] = useState(false);    
   const togglePost = () => setmodalPost(!modalPost);
   // modal post
+  
+  // modal progress uplaod
+  const [modalProgressUpload, setmodalProgressUpload] = useState(false);    
+  const toggleProgressUpload = () => setmodalProgressUpload(!modalProgressUpload);
+  // modal progress uplaod
 
   // modal post failed
   const [modalFailed, setModalFailed] = useState(false);
@@ -173,6 +196,8 @@ const Post = (props) => {
                     <p>Browse to choose a file</p>
                     <em>(10 files are the maximum number of files you can drop here)</em>
                     {/* jika melewati 10 maka akn muncul pesan limit */}
+                    <br />
+                    <em>(Max size of each file is a 1 MB)</em>
                   </div>
                 </section>
                 <Row>
@@ -235,11 +260,19 @@ const Post = (props) => {
             ) : null
           }
         </Modal>
+
+        <Modal style={{marginTop:"200px"}} isOpen={modalProgressUpload} toggle={toggleProgressUpload}>
+          <ModalBody>
+            <div className="text-center">{progressUpload}%</div>
+            <Progress value={progressUpload} />
+          </ModalBody>
+        </Modal>
+
         <Modal style={{marginTop:"200px"}} isOpen={modalFailed} toggle={toggleFailed}>
-        <ModalBody>
-          <p style={{color:"#c70039", fontSize:"24px", fontWeight:"normal", margin:"auto", textAlign:"center"}}>Created Post Failed</p>
-        </ModalBody>
-      </Modal>
+          <ModalBody>
+            <p style={{color:"#c70039", fontSize:"24px", fontWeight:"normal", margin:"auto", textAlign:"center"}}>Created Post Failed</p>
+          </ModalBody>
+        </Modal>
     </Fragment>
   );
 }

@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useContext} from 'react';
-import { Container,Col , Row,Form,  Button, Modal, ModalBody  } from 'reactstrap';
+import { Container,Col , Row,Form,  Button, Modal, ModalBody, Progress  } from 'reactstrap';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 
 // component
@@ -39,9 +39,8 @@ const Project = (props) => {
   // menampung image yang akan di tampilkan dan disimpan
   const [imagePrev, setImagePrev] = useState({photos : []});
 
-  const handleChangePost = (e) => {
-    setPost({...post,  [e.target.name] : e.target.value})
-  }
+  // set progres upload file
+  const [progressUpload, setProgressUpload] = useState(0);
 
   const handleCKEditor = ( event, editor ) => {
       const data = editor.getData();
@@ -59,21 +58,26 @@ const Project = (props) => {
       const body = new FormData();
       body.append("description", description);
 
-      if (imagePrev !== null) {
+      if (imagePrev.photos.length > 0) {
         imagePrev.photos.map(img => body.append("image", img.file));
       }else{
-        return alert("Choose Your Image Projects")
+        return setModalFailed(true);
       }
 
 
-      console.log("tipe data : ",body);
         const config = {
           headers: {
             "content-type": "multipart/form-data",
           },
-        };
+          onUploadProgress: progressEvent => {
+            let percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+            setProgressUpload(percentage);
 
-        console.log(id);
+            if (percentage <= 100) {
+              setmodalProgressUpload(true);
+            }
+          }
+        };
         
         const response = await API.post(`/project/${id}`, body, config);
 
@@ -85,6 +89,9 @@ const Project = (props) => {
           })
 
           setLoading(false);
+          setTimeout(() => {
+            setProgressUpload(0);
+          }, 1000)
         }
 
         // karna setelah diupload datanya tidak langsung muncul di page home, maka ku arahkan ke landing page agar di refresh dan diarahkan ke dashboard
@@ -133,6 +140,8 @@ const Project = (props) => {
   } = useDropzone({
     onDrop,
     maxFiles:10,
+    minSize: 0,
+    maxSize: 1048576,
     accept: 'image/jpeg, image/jpg, image/png'
   })
   // ==================================================
@@ -145,6 +154,11 @@ const Project = (props) => {
   const [modalProject, setModalProject] = useState(false);    
   const toggleProject = () => setModalProject(!modalProject);
   // modal Project
+
+  // modal progress uplaod
+  const [modalProgressUpload, setmodalProgressUpload] = useState(false);    
+  const toggleProgressUpload = () => setmodalProgressUpload(!modalProgressUpload);
+  // modal progress uplaod
   
   // modal Project Failed
   const [modalFailed, setModalFailed] = useState(false);
@@ -164,6 +178,8 @@ const Project = (props) => {
                     <p>Browse to choose a file</p>
                     <em>(10 files are the maximum number of files you can drop here)</em>
                     {/* jika melewati 10 maka akn muncul pesan limit */}
+                    <br />
+                    <em>(Max size of each file is a 1 MB)</em>
                   </div>
                 </section>
                 <Row>
@@ -219,6 +235,13 @@ const Project = (props) => {
               <Redirect to="/transactions" />
             ) : null
           }
+        </Modal>
+
+        <Modal style={{marginTop:"200px"}} isOpen={modalProgressUpload} toggle={toggleProgressUpload}>
+          <ModalBody>
+            <div className="text-center">{progressUpload}%</div>
+            <Progress value={progressUpload} />
+          </ModalBody>
         </Modal>
 
         <Modal style={{marginTop:"200px"}} isOpen={modalFailed} toggle={toggleFailed}>

@@ -1,5 +1,5 @@
 import React, {Fragment, useState, useCallback, useContext} from 'react';
-import { Container,Col , Row,Form, FormGroup, Input, Button, Modal, ModalBody } from 'reactstrap';
+import { Container,Col , Row,Form, FormGroup, Input, Button, Modal, ModalBody, Progress } from 'reactstrap';
 import { useHistory, useParams, Redirect } from 'react-router-dom';
 
 // component
@@ -41,6 +41,9 @@ const EditProfile = (props) => {
   // avatar profile
   const [image, setImage] = useState({ preview: "", raw: "" });
 
+  // set progres upload file
+  const [progressUpload, setProgressUpload] = useState(0);
+
   const handleChangeProfile = (e) => {
     // console.log(e.target.name);
     setProfile({...profile,  [e.target.name] : e.target.value})
@@ -79,6 +82,14 @@ const EditProfile = (props) => {
           headers: {
             "content-type": "multipart/form-data",
           },
+          onUploadProgress: progressEvent => {
+            let percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+            setProgressUpload(percentage);
+
+            if (percentage <= 100) {
+              setmodalProgressUpload(true);
+            }
+          }
         };
         
         const response = await API.patch("/update-user", body, config);
@@ -94,6 +105,11 @@ const EditProfile = (props) => {
             payload: response.data.data.post
           });
         }
+
+        
+          setTimeout(() => {
+            setProgressUpload(0);
+          }, 1000)
 
         // router.push("/profile")
     } catch (err) {
@@ -116,12 +132,23 @@ const EditProfile = (props) => {
         headers: {
           "content-type": "multipart/form-data",
         },
-    };
+        onUploadProgress: progressEvent => {
+          let percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+          setProgressUpload(percentage);
+
+          if (percentage <= 100) {
+            setmodalProgressUpload(true);
+          }
+        }
+      };
     
     const response = await API.post("/art", body, config);
     if (response.status === 200) {
       // alert("Upload Success")
       setModalArt(true)
+      setTimeout(() => {
+        setProgressUpload(0);
+      }, 1000)
     }
   }, [])
 
@@ -131,6 +158,8 @@ const EditProfile = (props) => {
   } = useDropzone({
     onDrop,
     maxFiles:10,
+    minSize: 0,
+    maxSize: 1048576,
     accept: 'image/jpeg, image/jpg, image/png'
   })
 
@@ -145,6 +174,11 @@ const EditProfile = (props) => {
   const [modalProfile, setModalProfile] = useState(false);    
   const toggleProfile = () => setModalProfile(!modalProfile);
   // modal Profile
+
+  // modal progress uplaod
+  const [modalProgressUpload, setmodalProgressUpload] = useState(false);    
+  const toggleProgressUpload = () => setmodalProgressUpload(!modalProgressUpload);
+  // modal progress uplaod
   
   // modal Profile Failed
   const [modalFailed, setModalFailed] = useState(false);
@@ -165,6 +199,8 @@ const EditProfile = (props) => {
                     <img src={iconUpload} alt="Upload"></img>
                     <p>Browse to choose a file</p>
                     <em>(10 files are the maximum number of files you can drop here)</em>
+                    <br />
+                    <em>(Max size of each file is a 1 MB)</em>
                   </div>
                 </section>
 
@@ -231,6 +267,13 @@ const EditProfile = (props) => {
               <Redirect to="/profile" />
             ) : null
           }
+        </Modal>
+
+        <Modal style={{marginTop:"200px"}} isOpen={modalProgressUpload} toggle={toggleProgressUpload}>
+          <ModalBody>
+            <div className="text-center">{progressUpload}%</div>
+            <Progress value={progressUpload} />
+          </ModalBody>
         </Modal>
 
         <Modal style={{marginTop:"200px"}} isOpen={modalFailed} toggle={toggleFailed}>
